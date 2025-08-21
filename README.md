@@ -1,1 +1,1 @@
-# windows_cc_exp
+# Windows C++ boilerplate project with Bazel  

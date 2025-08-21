@@ -1,0 +1,11 @@
+# Bazel
+bazel-*
+.clwb/
+MODULE.bazel.lock
+
+# CLion
+.idea/
+.vscode/
+venv/
+.yml
+

@@ -1,0 +1,100 @@
+load("@buildifier_prebuilt//:rules.bzl", "buildifier")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+buildifier(
+    name = "buildifier",
+    exclude_patterns = [
+        "./bazel-*/*",
+        "./.git/*",
+    ],
+    lint_mode = "fix",
+)
+
+cc_library(
+    name = "hello",
+    srcs = ["hello.cc"],
+    hdrs = ["hello.h"],
+    deps = [
+        "@absl//absl/strings",
+        "@glog",
+    ],
+)
+
+cc_test(
+    name = "hello_test",
+    srcs = ["hello_test.cc"],
+    deps = [
+        ":hello",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "hello_main",
+    srcs = ["hello_main.cc"],
+    deps = [
+        ":hello",
+        "@gflags",
+    ],
+)
+
+# Example of loading C library
+#cc_import(
+#    name = "CDHelper_lib",
+#    hdrs = ["third_party/include/CDHelper.h"],
+#    includes = ["third_party/include"],
+#    interface_library = "third_party/lib/CDHelper.lib",  # .lib for linking
+#    shared_library = "third_party/bin/CDHelper.dll",  # runtime DLL
+#)
+
+# Example of loading headers
+cc_import(
+    name = "CortexDecoderHasp_lib",
+    hdrs = ["third_party/include/crdDefs.h"],
+    includes = ["third_party/include"],
+    interface_library = "third_party/lib/CortexDecoderHasp.lib",
+    shared_library = "third_party/bin/CortexDecoderHasp.dll",
+)
+
+cc_library(
+    name = "cortext_decoder",
+    srcs = ["cortex_decoder.cc"],
+    hdrs = ["cortex_decoder.h"],
+    deps = [
+        ":cortext_result",
+        ":image_frame",
+        "@absl//absl/status:statusor",
+        "@absl//absl/strings",
+        "@absl//absl/synchronization",
+        "@glog",
+        "@status_macros",
+    ],
+)
+
+cc_library(
+    name = "preprocessing",
+    srcs = ["preprocessing.cc"],
+    hdrs = ["preprocessing.h"],
+    deps = [
+        ":image_frame",
+        "@absl//absl/status:statusor",
+        "@absl//absl/strings",
+        "@glog",
+    ],
+)
+
+cc_library(
+    name = "image_frame",
+    srcs = ["image_frame.cc"],
+    hdrs = ["image_frame.h"],
+    deps = [
+        "@absl//absl/strings",
+    ],
+)
+
+cc_library(
+    name = "cortext_result",
+    srcs = ["cortext_result.cc"],
+    hdrs = ["cortext_result.h"],
+    deps = ["@absl//absl/strings"],
+)
